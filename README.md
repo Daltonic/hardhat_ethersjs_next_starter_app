@@ -14,45 +14,35 @@
 
 <br>
 
-A Next.js starter that includes all you need to build amazing projects 🔥. Fork and customize from [jpedroschmitz](https://github.com/jpedroschmitz/typescript-nextjs-starter)
 
-- 🚀 **Next.js 12**
-- ⚙️ **Tailwind CSS 3** - A utility-first CSS framework
-- 🍓 **Styled Components** - Styling React component
-- 📏 **ESLint** — Pluggable JavaScript linter
-- 💖 **Prettier** - Opinionated Code Formatter
-- 🐶 **Husky** — Use git hooks with ease
-- 🚫 **lint-staged** - Run linters against staged git files
-- 🗂 **Absolute import** - Import folders and files using the `@` prefix
+# Hardhat-Tailwind-NextJs Ethers Starter Kit
+Speedily develope your decentralized application with this NextJs starter kit for free. It has Redux-Toolkit, NextJs 13, React 18, Hardhat, EthersJs, Tailwind, etc.
 
-## 🚀 Getting started
+Follow the steps below to download, install, and run this project.
 
-The best way to start with this template is using `create-next-app`.
+## Dependencies
+Install these prerequisites to follow along with the tutorial. See free video tutorial or a full explanation of each prerequisite.
+- NPM: https://nodejs.org
+- Hardhat: https://hardhat.org/
+- EthersJs: https://ethers.org/
+- Tailwind CSS: https://tailwindcss.com/
 
+
+## Step 1. Clone the project
+`git clone https://github.com/Daltonic/tailwind_ethers_starter_kit <PROJECT NAME>`
+
+## Step 2. Install dependencies
+```sh
+$ cd <PROJECT NAME>
+$ yarn install # or npm install
 ```
-npx create-next-app ts-next -e https://github.com/chhpt/nextjs-starter.git
+## Step 3. Start Hardhat Node
+Open the terminal and run the command below.
+```sh
+$ yarn hardhat node
 ```
 
-If you prefer you can clone this repository and run the following commands inside the project folder:
+## Step 4. Run the Front End Application
+`$ yarn dev`
+Visit this URL in your browser: http://localhost:3000
 
-1. `npm install` or `yarn`;
-2. `yarn dev`;
-
-To view the project open `http://localhost:3000`.
-
-## 🤝 Contributing
-
-1. Fork this repository;
-2. Create your branch: `git checkout -b my-new-feature`;
-3. Commit your changes: `git commit -m 'Add some feature'`;
-4. Push to the branch: `git push origin my-new-feature`.
-
-**After your pull request is merged**, you can safely delete your branch.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
-
----
-
-Made with ♥ by Clare Chang
