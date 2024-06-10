@@ -62,7 +62,7 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     minted[nft.id + 1] = nft;
     tokenIdExist[nft.id + 1] = true;
     totalSupply++;
-    
+
     _safeMint(msg.sender, nft.id + 1);
   }
 
@@ -235,5 +235,76 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     bytes4 interfaceId
   ) public view virtual override(ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
+  }
+
+  function getAllNfts() public view returns (MintStruct[] memory Minted) {
+    Minted = new MintStruct[](totalSupply);
+    for (uint256 i = 0; i < totalSupply; i++) {
+      Minted[i] = minted[i + 1];
+    }
+  }
+
+  function getMintedNfts() public view returns (MintStruct[] memory Minted) {
+    uint256 available;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (!minted[i + 1].traits.breeded) available++;
+    }
+
+    Minted = new MintStruct[](available);
+
+    uint256 index;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (!minted[i + 1].traits.breeded) Minted[index++] = minted[i + 1];
+    }
+  }
+
+  function getBreededNfts() public view returns (MintStruct[] memory Minted) {
+    uint256 available;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (minted[i + 1].traits.breeded) available++;
+    }
+
+    Minted = new MintStruct[](available);
+
+    uint256 index;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (minted[i + 1].traits.breeded) Minted[index++] = minted[i + 1];
+    }
+  }
+
+  function getMyNfts() public view returns (MintStruct[] memory Minted) {
+    uint256 available;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (minted[i + 1].owner == msg.sender) available++;
+    }
+
+    Minted = new MintStruct[](available);
+
+    uint256 index;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (minted[i + 1].owner == msg.sender) Minted[index++] = minted[i + 1];
+    }
+  }
+
+  function getParentsOf(uint256 _tokenId) public view returns (MintStruct[] memory Minted) {
+    if (!minted[_tokenId].traits.breeded) {
+      Minted = new MintStruct[](0);
+      return Minted;
+    }
+
+    Minted = new MintStruct[](minted[_tokenId].traits.parents.length);
+    uint256 index;
+    for (uint256 i = 0; i < totalSupply; i++) {
+      if (
+        minted[i + 1].id == minted[_tokenId].traits.parents[0] ||
+        minted[i + 1].id == minted[_tokenId].traits.parents[1]
+      ) {
+        Minted[index++] = minted[i + 1];
+      }
+    }
+  }
+
+  function getNft(uint256 _tokenId) public view returns (MintStruct memory) {
+    return minted[_tokenId];
   }
 }

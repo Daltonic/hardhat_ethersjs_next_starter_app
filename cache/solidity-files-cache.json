@@ -37,8 +37,8 @@
       ]
     },
     "/Users/daltonic/Sites/breeder/contracts/Breeder.sol": {
-      "lastModificationDate": 1718016276325,
-      "contentHash": "4321ad123dd9cbd07a884f3f8305f64e",
+      "lastModificationDate": 1718017599016,
+      "contentHash": "0258ab8a50154dc898fb7a9f240375f1",
       "sourceName": "contracts/Breeder.sol",
       "solcConfig": {
         "version": "0.8.17",
