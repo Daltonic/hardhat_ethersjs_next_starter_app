@@ -47,7 +47,7 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
   uint256[] rarities = new uint256[](5);
 
   uint256 private totalSupply;
-  uint256 private mintCost = 0.02 ether;
+  uint256 private mintCost = 0.002 ether;
   mapping(uint256 => MintStruct) minted;
   mapping(uint256 => bool) tokenIdExist;
 
@@ -59,11 +59,11 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
 
     MintStruct memory nft = createNFT(weapons, environments, rarities, false);
 
-    minted[nft.id + 1] = nft;
-    tokenIdExist[nft.id + 1] = true;
+    minted[nft.id] = nft;
+    tokenIdExist[nft.id] = true;
     totalSupply++;
 
-    _safeMint(msg.sender, nft.id + 1);
+    _safeMint(msg.sender, nft.id);
   }
 
   function breedNft(uint256 _fatherTokenId, uint256 _motherTokenId) public payable nonReentrant {
@@ -71,21 +71,37 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     require(tokenIdExist[_motherTokenId], 'Mother does not exist');
     require(msg.value >= mintCost, 'Insufficient fund for minting');
 
-    string[] memory familyWeapons = new string[](2);
+    // Boast the chances of inheriting parents weapons
+    string[] memory familyWeapons = new string[](weapons.length);
+    familyWeapons = weapons;
+
+    uint256 weaponToEliminate = randomNum(weapons.length, currentTime(), 0);
     familyWeapons[0] = minted[_fatherTokenId].traits.weapon;
+
+    weaponToEliminate = randomNum(weapons.length, currentTime(), 0);
     familyWeapons[1] = minted[_motherTokenId].traits.weapon;
 
-    string[] memory familyEnvironments = new string[](2);
-    familyEnvironments[0] = minted[_fatherTokenId].traits.environment;
-    familyEnvironments[1] = minted[_motherTokenId].traits.environment;
+    // Boast the chances of inheriting parents environment
+    string[] memory familyEnvironments = new string[](weapons.length);
+    familyEnvironments = environments;
 
+    uint256 envToEliminate = randomNum(environments.length, currentTime(), 0);
+    familyEnvironments[envToEliminate] = minted[_fatherTokenId].traits.environment;
+
+    envToEliminate = randomNum(environments.length, currentTime(), 0);
+    familyEnvironments[envToEliminate] = minted[_motherTokenId].traits.environment;
+
+    // Create the NFT with the characteristics
     MintStruct memory nft = createNFT(familyWeapons, familyEnvironments, rarities, true);
 
-    minted[nft.id + 1] = nft;
-    tokenIdExist[nft.id + 1] = true;
+    minted[nft.id] = nft;
+    tokenIdExist[nft.id] = true;
     totalSupply++;
 
-    _safeMint(msg.sender, nft.id + 1);
+    _safeMint(msg.sender, nft.id);
+
+    // Assign parents to child NFT
+    minted[nft.id].traits.parents = [_fatherTokenId, _motherTokenId];
   }
 
   function createNFT(
@@ -93,7 +109,7 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     string[] memory _environments,
     uint256[] memory _rarities,
     bool _breed
-  ) public view returns (MintStruct memory nft) {
+  ) internal view returns (MintStruct memory nft) {
     require(totalSupply + 1 <= 1000, 'Out of tokens, check back later');
 
     nft.id = totalSupply + 1;
@@ -233,7 +249,7 @@ contract Breeder is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
 
   function supportsInterface(
     bytes4 interfaceId
-  ) public view virtual override(ERC721) returns (bool) {
+  ) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 
